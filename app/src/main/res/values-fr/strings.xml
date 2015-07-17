@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ColorSlider</string>
     <string name="blue">Bleu</string>
     <string name="red">Rouge</string>
     <string name="green">Vert</string>

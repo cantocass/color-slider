@@ -2,21 +2,32 @@ package com.familyfunctional.colorslider;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.List;
 
-public class MainActivity extends ActionBarActivity {
+import retrofit.Callback;
+import retrofit.RestAdapter;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+
+public class MainActivity extends AppCompatActivity {
     private SeekBar redSeekBar, greenSeekBar, blueSeekBar;
-    private TextView redValue, greenValue, blueValue;
+    private TextView redValue, greenValue, blueValue, colorName;
     private ImageView imageView;
+    private String hexValue;
+    private ColourLoversApi api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setupApi();
 
         redSeekBar = (SeekBar) findViewById(R.id.seekBar_red);
         greenSeekBar = (SeekBar) findViewById(R.id.seekBar_green);
@@ -31,6 +42,20 @@ public class MainActivity extends ActionBarActivity {
         blueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
 
         imageView = (ImageView) findViewById(R.id.imageView);
+        colorName = (TextView) findViewById(R.id.name);
+    }
+
+    private void setupApi() {
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setEndpoint("https://www.colourlovers.com/api")
+                .build();
+
+        api = restAdapter.create(ColourLoversApi.class);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         refreshUI();
     }
 
@@ -42,12 +67,12 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-
+            //do nothing
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-
+            //do nothing
         }
     };
 
@@ -57,6 +82,25 @@ public class MainActivity extends ActionBarActivity {
         red = redSeekBar.getProgress();
         green = greenSeekBar.getProgress();
         blue = blueSeekBar.getProgress();
+        hexValue = createHexValue(red, green, blue);
+
+        //<editor-fold desc="description">
+        api.singleColour(hexValue, new Callback<List<Colour>>() {
+            @Override
+            public void success(List<Colour> colours, Response response) {
+                if (colours.size() > 0) {
+                    colorName.setText(colours.get(0).getTitle());
+                } else {
+                    colorName.setText("#" + hexValue);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("fail", error.toString());
+            }
+        });
+        //</editor-fold>
 
         redValue.setText(String.valueOf(red));
         greenValue.setText(String.valueOf(green));
@@ -65,4 +109,8 @@ public class MainActivity extends ActionBarActivity {
         imageView.setBackgroundColor(Color.rgb(red, green, blue));
     }
 
+    //pad any leading 0s
+    private String createHexValue(int red, int green, int blue) {
+        return String.format("%02X", red) + String.format("%02X", green) + String.format("%02X", blue);
+    }
 }

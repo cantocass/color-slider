@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ColorSlider</string>
     <string name="blue">蓝色</string>
     <string name="green">绿色</string>
     <string name="red">红色</string>
+    <string name="app_name" translatable="false"></string>
 </resources>
