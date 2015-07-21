@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //<editor-fold desc="networking">
         setupApi();
+        //</editor-fold>
 
         redSeekBar = (SeekBar) findViewById(R.id.seekBar_red);
         greenSeekBar = (SeekBar) findViewById(R.id.seekBar_green);
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         colorName = (TextView) findViewById(R.id.name);
     }
 
+    //<editor-fold desc="networking">
     private void setupApi() {
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint("https://www.colourlovers.com/api")
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         api = restAdapter.create(ColourLoversApi.class);
     }
+    //</editor-fold>
 
     @Override
     protected void onResume() {
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
             refreshUI();
         }
 
+        //<editor-fold desc="unused methods">
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
             //do nothing
@@ -74,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
             //do nothing
         }
+        //</editor-fold>
+
     };
 
     private void refreshUI() {
@@ -82,9 +89,9 @@ public class MainActivity extends AppCompatActivity {
         red = redSeekBar.getProgress();
         green = greenSeekBar.getProgress();
         blue = blueSeekBar.getProgress();
-        hexValue = createHexValue(red, green, blue);
 
-        //<editor-fold desc="description">
+        //<editor-fold desc="networking">
+        hexValue = createHexValue(red, green, blue);
         api.singleColour(hexValue, new Callback<List<Colour>>() {
             @Override
             public void success(List<Colour> colours, Response response) {
@@ -109,8 +116,10 @@ public class MainActivity extends AppCompatActivity {
         imageView.setBackgroundColor(Color.rgb(red, green, blue));
     }
 
-    //pad any leading 0s
+    //<editor-fold desc="networking">
     private String createHexValue(int red, int green, int blue) {
         return String.format("%02X", red) + String.format("%02X", green) + String.format("%02X", blue);
     }
+    //</editor-fold>
+
 }
