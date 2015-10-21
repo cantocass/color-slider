@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private String hexValue;
     private ColourLoversApi api;
+    int red, green, blue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,20 +78,27 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            //do nothing
+            requestWebColorName();
         }
         //</editor-fold>
 
     };
 
     private void refreshUI() {
-        int red, green, blue;
 
         red = redSeekBar.getProgress();
         green = greenSeekBar.getProgress();
         blue = blueSeekBar.getProgress();
 
-        //<editor-fold desc="networking">
+        redValue.setText(String.valueOf(red));
+        greenValue.setText(String.valueOf(green));
+        blueValue.setText(String.valueOf(blue));
+
+        imageView.setBackgroundColor(Color.rgb(red, green, blue));
+    }
+
+    //<editor-fold desc="networking">
+    private void requestWebColorName() {
         hexValue = createHexValue(red, green, blue);
         api.singleColour(hexValue, new Callback<List<Colour>>() {
             @Override
@@ -107,14 +115,8 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("fail", error.toString());
             }
         });
-        //</editor-fold>
-
-        redValue.setText(String.valueOf(red));
-        greenValue.setText(String.valueOf(green));
-        blueValue.setText(String.valueOf(blue));
-
-        imageView.setBackgroundColor(Color.rgb(red, green, blue));
     }
+    //</editor-fold>
 
     //<editor-fold desc="networking">
     private String createHexValue(int red, int green, int blue) {
