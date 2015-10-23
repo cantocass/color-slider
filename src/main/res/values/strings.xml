@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">ColorSlider</string>
-    <string name="color_slider">Color Slider</string>
-
-    <string name="red">Red</string>
-    <string name="blue">Blue</string>
-    <string name="green">Green</string>
-    <string name="zero">0</string>
-</resources>

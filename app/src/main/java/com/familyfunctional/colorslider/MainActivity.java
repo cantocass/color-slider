@@ -70,18 +70,18 @@ public class MainActivity extends AppCompatActivity {
             refreshUI();
         }
 
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            requestWebColorName();
+        }
+
+
         //<editor-fold desc="unused methods">
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
             //do nothing
         }
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            requestWebColorName();
-        }
         //</editor-fold>
-
     };
 
     private void refreshUI() {
@@ -116,9 +116,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    //</editor-fold>
 
-    //<editor-fold desc="networking">
     private String createHexValue(int red, int green, int blue) {
         return String.format("%02X", red) + String.format("%02X", green) + String.format("%02X", blue);
     }
