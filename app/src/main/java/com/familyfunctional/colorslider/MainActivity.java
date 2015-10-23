@@ -1,13 +1,20 @@
 package com.familyfunctional.colorslider;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 
 import retrofit.Callback;
@@ -19,9 +26,10 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar redSeekBar, greenSeekBar, blueSeekBar;
     private TextView redValue, greenValue, blueValue, colorName;
     private ImageView imageView;
-    private String hexValue;
+    private String hexValue, colorTitle;
     private ColourLoversApi api;
     int red, green, blue;
+    boolean hasToasted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +54,38 @@ public class MainActivity extends AppCompatActivity {
 
         imageView = (ImageView) findViewById(R.id.imageView);
         colorName = (TextView) findViewById(R.id.name);
+
+        //<editor-fold desc="notification/wear button">
+        View hiddenButton = findViewById(R.id.hiddenButton);
+        hiddenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int id = 1;
+                WeakReference<Context> contextRef = new WeakReference<>(v.getContext());
+                Bitmap color = Bitmap.createBitmap(320, 320, Bitmap.Config.ARGB_8888);
+                color.eraseColor(Color.rgb(red, green, blue));
+
+                NotificationCompat.Builder notificationBuilder =
+                        new NotificationCompat.Builder(contextRef.get())
+                                .setSmallIcon(R.drawable.ic_palette_white_24dp)
+                                .setColor(Color.rgb(red, green, blue))
+                                .setContentTitle("#" + hexValue)
+                                .setContentText(colorTitle);
+
+                NotificationCompat.WearableExtender extender = new NotificationCompat.WearableExtender();
+                extender.setBackground(color);
+                notificationBuilder.extend(extender);
+
+                NotificationManagerCompat.from(contextRef.get()).notify(id, notificationBuilder.build());
+            }
+        });
+        //</editor-fold>
     }
 
     //<editor-fold desc="networking">
     private void setupApi() {
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint("https://www.colourlovers.com/api")
+                .setEndpoint("http://www.colourlovers.com/api")
                 .build();
 
         api = restAdapter.create(ColourLoversApi.class);
@@ -76,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        //<editor-fold desc="unused methods">
+        //<editor-fold desc="unused method">
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
             //do nothing
@@ -104,21 +138,31 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void success(List<Colour> colours, Response response) {
                 if (colours.size() > 0) {
-                    colorName.setText(colours.get(0).getTitle());
+                    colorTitle = colours.get(0).getTitle();
+                    colorName.setText(colorTitle);
                 } else {
                     colorName.setText("#" + hexValue);
+                }
+
+                if (!hasToasted) {
+                    toastToTheCreators();
+                    hasToasted = true;
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("fail", error.toString());
+                Log.d("network", error.toString());
             }
         });
     }
 
     private String createHexValue(int red, int green, int blue) {
         return String.format("%02X", red) + String.format("%02X", green) + String.format("%02X", blue);
+    }
+
+    private void toastToTheCreators() {
+        Toast.makeText(this, getString(R.string.thank_you) + getString(R.string.colourlovers), Toast.LENGTH_SHORT).show();
     }
     //</editor-fold>
 

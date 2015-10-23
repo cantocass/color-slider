@@ -154,12 +154,19 @@
 
     </LinearLayout>
 
+    <FrameLayout
+        android:id="@+id/hiddenButton"
+        android:layout_marginTop="150dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:foreground="?android:attr/selectableItemBackground">
+
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="525dp"
             android:layout_height="525dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="150dp"
             tools:background="#123123"/>
 
+    </FrameLayout>
 </LinearLayout>
