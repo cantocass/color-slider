@@ -1,5 +1,6 @@
 # color-slider
 An Android app that has 3 sliders for each RGB and combines them into an image for display.
+Available on the [Google Play Store](https://play.google.com/store/apps/details?id=com.familyfunctional.colorslider)
 
 You can use this app to demonstrate the various parts of development in Android.
 Utilizes public API generously created by www.colourlovers.com.
@@ -16,9 +17,11 @@ Features include:
 - Using background thread for network calls
 - Create Toast message
 
-In both portrait and landscape
-![Color Slider portrait](/../images/v1-portrait.png?raw=true "Test")
+
+Portrait
+
+![Color Slider portrait](/../images/v1-portrait.png?raw=true "Portrait")
 
 
 Landscape
-![Color Slider landscape](/../images/v1-landscape.png?raw=true "Test")
+![Color Slider landscape](/../images/v1-landscape.png?raw=true "Landscape")
