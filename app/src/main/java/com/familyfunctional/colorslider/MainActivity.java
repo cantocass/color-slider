@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toastToTheCreators() {
-        Toast.makeText(this, getString(R.string.thank_you) + getString(R.string.colourlovers), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.thank_you) + " " + getString(R.string.colourlovers), Toast.LENGTH_LONG).show();
     }
     //</editor-fold>
 
