@@ -8,6 +8,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -16,6 +18,7 @@ import android.widget.Toast;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
+import java.util.Random;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -26,10 +29,13 @@ public class MainActivity extends AppCompatActivity {
     private SeekBar redSeekBar, greenSeekBar, blueSeekBar;
     private TextView redValue, greenValue, blueValue, colorName;
     private ImageView imageView;
+    int red, green, blue;
+
+    //<editor-fold desc="advanced variables"
     private String hexValue, colorTitle;
     private ColourLoversApi api;
-    int red, green, blue;
     boolean hasToasted = false;
+    //</editor-fold>
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,33 @@ public class MainActivity extends AppCompatActivity {
         refreshUI();
     }
 
+    //<editor-fold desc="menu:randomize"
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_activity_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_random:
+                randomizeColors();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    protected void randomizeColors() {
+        Random random = new Random();
+
+        blueSeekBar.setProgress(random.nextInt(255));
+        redSeekBar.setProgress(random.nextInt(255));
+        greenSeekBar.setProgress(random.nextInt(255));
+    }
+    //</editor-fold>
+
     private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -108,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
             requestWebColorName();
         }
-
 
         //<editor-fold desc="unused method">
         @Override
@@ -165,5 +197,4 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, getString(R.string.thank_you) + " " + getString(R.string.colourlovers), Toast.LENGTH_LONG).show();
     }
     //</editor-fold>
-
 }
