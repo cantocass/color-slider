@@ -3,5 +3,6 @@
     <string name="blue">Blau</string>
     <string name="green">Grün</string>
     <string name="red">Rot</string>
-    <string name="thank_you">Danke schön </string>
+    <string name="thank_you">Danke schön</string>
+    <string name="random">Zufällige</string>
 </resources>

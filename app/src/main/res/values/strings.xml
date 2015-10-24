@@ -8,4 +8,5 @@
     <string name="zero" translatable="false">0</string>
     <string name="thank_you">Thank you</string>
     <string name="colourlovers" translatable="false">www.colourlovers.com</string>
+    <string name="random">Random</string>
 </resources>

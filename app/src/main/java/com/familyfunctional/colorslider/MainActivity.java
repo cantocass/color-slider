@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     //<editor-fold desc="advanced variables"
     private String hexValue, colorTitle;
     private ColourLoversApi api;
-    boolean hasToasted = false;
     //</editor-fold>
 
     @Override
@@ -42,8 +41,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //<editor-fold desc="networking">
+        //<editor-fold desc="networking and Toast">
         setupApi();
+        if (savedInstanceState == null) {
+            toastToTheCreators();
+        }
         //</editor-fold>
 
         redSeekBar = (SeekBar) findViewById(R.id.seekBar_red);
@@ -174,11 +176,6 @@ public class MainActivity extends AppCompatActivity {
                     colorName.setText(colorTitle);
                 } else {
                     colorName.setText("#" + hexValue);
-                }
-
-                if (!hasToasted) {
-                    toastToTheCreators();
-                    hasToasted = true;
                 }
             }
 
