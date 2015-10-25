@@ -130,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
         blueSeekBar.setProgress(random.nextInt(255));
         redSeekBar.setProgress(random.nextInt(255));
         greenSeekBar.setProgress(random.nextInt(255));
+
+        requestWebColorName();
     }
     //</editor-fold>
 
